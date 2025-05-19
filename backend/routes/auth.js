@@ -76,7 +76,9 @@ router.post("/login", async (req, res) => {
         return res.status(401).json({status:"fail", message: "Invalid password" });
     }
 
-    const token = await jwt.sign({ email: email }, process.env.JWT_Secret, {expiresIn: "1h",});
+    const token = await jwt.sign({ email: email }, "jwt_secret_key", {
+      expiresIn: "1h",
+    });
 
     res.status(201).json({
         status: "success",
@@ -110,7 +112,9 @@ router.post("/register", async (req, res) => {
             location,
         })
 
-        const token = await jwt.sign({ email: email }, process.env.JWT_Secret, {expiresIn: "1h",});
+        const token = await jwt.sign({ email: email }, "jwt_secret_key", {
+          expiresIn: "1h",
+        });
         
         res.status(201).json({
             status: "success",
