@@ -7,7 +7,12 @@ import router from "./routes/auth.js";
 const app = express();
 const PORT = 5000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://food-bar-frontend.vercel.app/", 
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use("/api/auth", router);
 
