@@ -61,19 +61,26 @@ router.post("/orderData", async (req, res) => {
 
 
 router.post("/login", async (req, res) => {
+  try {
     const { email, password } = req.body;
     if (!email || !password) {
-        return res.status(401).json({status:"fail", message: "Please fill all the fields" });
+      return res
+        .status(401)
+        .json({ status: "fail", message: "Please fill all the fields" });
     }
 
     const user = await Users.findOne({ email });
     if (!user) {
-        return res.status(401).json({status:"fail", message: "User not found" });
+      return res
+        .status(401)
+        .json({ status: "fail", message: "User not found" });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-        return res.status(401).json({status:"fail", message: "Invalid password" });
+      return res
+        .status(401)
+        .json({ status: "fail", message: "Invalid password" });
     }
 
     const token = await jwt.sign({ email: email }, "jwt_secret_key", {
@@ -81,11 +88,17 @@ router.post("/login", async (req, res) => {
     });
 
     res.status(201).json({
-        status: "success",
-        message: "Login successful",
-        token,
-        user
+      status: "success",
+      message: "Login successful",
+      token,
+      user,
     });
+  } catch (error) {
+    return res
+      .status(501)
+      .json({ status: "fail", message: "Internal server" });
+  }
+    
 });
 
 router.post("/register", async (req, res) => {
